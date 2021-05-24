@@ -1,0 +1,85 @@
+name: Release
+
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'     
+        required: true
+
+jobs:
+
+  # Build the project
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.REPO_TOKEN }}'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '15'
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: release-${{ github.sha }}
+
+  # Check that all the tests pass
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: release-${{ github.sha }}
+      - run: npm start -- run example out
+      - run: npm test
+
+  # Bump the package.json version
+  bump:
+    name: Bump package.json
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: release-${{ github.sha }}
+      - run: git config --global user.name 'VuziBot'
+      - run: git config --global user.email 'vuzi@protonmail.com'
+      - run: git checkout -b "release/v${{ github.event.inputs.version }}"
+      - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
+      - run: git commit -m "Bump version to ${{ github.event.inputs.version }}" -a
+      - run: git push -u origin "release/v${{ github.event.inputs.version }}"
+
+  # Create the release pull request
+  pull-request:
+    name: Release pull request
+    runs-on: ubuntu-latest
+    needs: bump
+
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: release-${{ github.sha }}
+      - uses: repo-sync/pull-request@v2
+        with:
+          source_branch: "release/v${{ github.event.inputs.version }}"  
+          destination_branch: master
+          pr_title: "Release ${{ github.event.inputs.version }}"
+          pr_body: "Release to version ${{ github.event.inputs.version }}"
+          pr_label: "release"
+          github_token: ${{ secrets.REPO_TOKEN }}

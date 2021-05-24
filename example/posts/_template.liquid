@@ -1,0 +1,28 @@
+<article>
+
+  <header>
+    <h1>{{ title }}</h1>
+
+    <span>
+      By {{ author }}
+    </span>
+
+  </header>
+
+  {{ content }}
+
+  {%- if tags.size > 0 -%}
+    <footer>
+      <ul>
+      {%- for tag in tags -%}
+        <li>
+          <a href="#">
+            {{ tag }}
+          </a>
+        </li>
+      {%- endfor -%}
+      </ul>
+    <footer>
+  {%- endif -%}
+
+</article>
