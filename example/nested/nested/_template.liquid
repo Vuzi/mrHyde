@@ -1,0 +1,28 @@
+<article>
+
+  <header>
+    <h1>{{ metadata.title }}</h1>
+
+    <span>
+      By {{ metadata.author }}
+    </span>
+
+  </header>
+
+  {{ content }}
+
+  {%- if metadata.tags.size > 0 -%}
+    <footer>
+      <ul aria-label="Tags">
+      {%- for tag in metadata.tags -%}
+        <li>
+          <a href="#">
+            {{ tag }}
+          </a>
+        </li>
+      {%- endfor -%}
+      </ul>
+    <footer>
+  {%- endif -%}
+
+</article>

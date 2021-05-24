@@ -1,0 +1,25 @@
+<article>
+
+  <header>
+    <h1>Hello</h1>
+  </header>
+
+  <div>
+    <ul>
+    {%- for postKeyValue in posts -%}
+      {% assign post = postKeyValue[1] %}
+      <li>
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.abstract }}</p>
+        <a href="{{ post.filePath }}" >Click here</a>
+        <div>
+          {%- for tag in post.tags -%}
+            <span>{{ tag }}</span>
+          {%- endfor -%}
+        </div>
+      </li>
+    {%- endfor -%}
+    </ul>
+  <div>
+
+</article>
