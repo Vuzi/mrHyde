@@ -1,11 +1,14 @@
 name: Release
 
-on:
-  push:
-    tags:
-      - "v*"
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'     
+        required: true
 
 jobs:
+  # Setup job, get nodeJs and checkout
   setup:
     name: Setup
     runs-on: ubuntu-latest
@@ -16,6 +19,7 @@ jobs:
         with:
           node-version: '15'
 
+  # Check that the project build
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -29,8 +33,8 @@ jobs:
           key: ${{ github.sha }}
       - run: npm ci
       - run: npm run build
-      - run: npm run build
 
+  # Check that all the tests pass
   test:
     name: Tests
     runs-on: ubuntu-latest
@@ -45,8 +49,23 @@ jobs:
       - run: npm start -- run example out
       - run: npm test
 
+  # Bump the package.json version
+  bump:
+    name: Bump package.json to ${{ github.event.inputs.version }}
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - run: npm version ${{ github.event.inputs.version }}
+      - uses: EndBug/add-and-commit@v7
+        with:
+          add: package.json
+          tag: '${{ github.event.inputs.version }} --force'
+          message: Release ${{ github.event.inputs.version }}
+
+  # Perform a release
   release:
-    name: Release
+    name: Release ${{ github.event.inputs.version }}
     runs-on: ubuntu-latest
     needs: test
 
@@ -62,3 +81,15 @@ jobs:
           prerelease: false
           files: |
             LICENSE.md
+
+  # Publish to NPM
+  publish:
+    name: Publish on NPM
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
