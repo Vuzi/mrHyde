@@ -70,20 +70,6 @@ jobs:
         with:
           branch: "release-v${{ github.event.inputs.version }}"
       - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
-      - run: git push
-
-  # Create the release pull request
-  pull-request:
-    name: Release pull request
-    runs-on: ubuntu-latest
-    needs: bump
-
-    steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ github.sha }}
       - uses: repo-sync/pull-request@v2
         with:
           source_branch: "release-v${{ github.event.inputs.version }}"  
