@@ -54,14 +54,14 @@ jobs:
         with:
           path: ./*
           key: release-${{ github.sha }}
-      - run: |
-          git config --global user.email "github-action@users.noreply.github.com"
-          git config --global user.name "GitHub Action"
       - uses: peterjgrainger/action-create-branch@v2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         with:
           branch: "release-v${{ github.event.inputs.version }}"
+      #- run: |
+      #    git config --global user.email "github-action@users.noreply.github.com"
+      #    git config --global user.name "GitHub Action"
       - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
       - run: git commit -m "Bump version to ${{ github.event.inputs.version }}" -a
       - uses: ad-m/github-push-action@master
