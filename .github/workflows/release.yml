@@ -68,7 +68,7 @@ jobs:
       - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
 
   # Create the release pull request
-  bump:
+  pull-request:
     name: Release pull request
     runs-on: ubuntu-latest
     needs: test
