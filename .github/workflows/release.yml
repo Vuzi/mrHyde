@@ -56,7 +56,7 @@ jobs:
           key: release-${{ github.sha }}
       - uses: peterjgrainger/action-create-branch@v2.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.REPO_TOKEN }}"
         with:
           branch: "release-v${{ github.event.inputs.version }}"
       - run: |
@@ -66,7 +66,7 @@ jobs:
       - run: git commit -m "Bump version to ${{ github.event.inputs.version }}" -a
       - uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.REPO_TOKEN }}
+          github_token: "${{ secrets.REPO_TOKEN }}"
           branch: "release-v${{ github.event.inputs.version }}"
 
   # Create the release pull request
