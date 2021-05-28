@@ -56,12 +56,8 @@ jobs:
         with:
           path: ./*
           key: release-${{ github.sha }}
-      - uses: oleksiyrudenko/gha-git-credentials@v2.1
-        with:
-          name: 'VuziBot'
-          email: 'vuzi@protonmail.com'
-          actor: 'VuziBot'
-          token: '${{ secrets.REPO_TOKEN }}'
+      - run: git config --global user.name 'VuziBot'
+      - run: git config --global user.email 'vuzi@protonmail.com'
       - run: git checkout -b "release-v${{ github.event.inputs.version }}"
       - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
       - run: git commit -m "Bump version to ${{ github.event.inputs.version }}" -a
