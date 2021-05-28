@@ -59,9 +59,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         with:
           branch: "release-v${{ github.event.inputs.version }}"
-      #- run: |
-      #    git config --global user.email "vuzi@protonmail.com"
-      - run: git config --global user.name "VuziBot"
+      - run: |
+          git config --global user.email "vuzi@protonmail.com"
+          git config --global user.name "VuziBot"
       - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
       - run: git commit -m "Bump version to ${{ github.event.inputs.version }}" -a
       - uses: ad-m/github-push-action@master
