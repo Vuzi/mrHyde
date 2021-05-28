@@ -56,7 +56,7 @@ jobs:
           key: release-${{ github.sha }}
       - uses: peterjgrainger/action-create-branch@v2.0.1
         env:
-          GITHUB_TOKEN: "${{ secrets.REPO_TOKEN }}"
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
           branch: "release-v${{ github.event.inputs.version }}"
       - run: |
