@@ -65,6 +65,8 @@ jobs:
       - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
       - run: git commit -m "Bump version to ${{ github.event.inputs.version }}" -a
       - uses: ad-m/github-push-action@master
+        env:
+          INPUT_GITHUB_TOKEN: "${{ secrets.REPO_TOKEN }}"
         with:
           github_token: "${{ secrets.REPO_TOKEN }}"
           branch: "release-v${{ github.event.inputs.version }}"
