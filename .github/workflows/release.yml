@@ -16,6 +16,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.REPO_TOKEN }}'
       - uses: actions/setup-node@v2
         with:
           node-version: '15'
@@ -58,7 +60,7 @@ jobs:
         with:
           name: 'VuziBot'
           email: 'vuzi@protonmail.com'
-          actor: 'Vuzi'
+          actor: 'VuziBot'
           token: '${{ secrets.REPO_TOKEN }}'
       - run: git checkout -b "release-v${{ github.event.inputs.version }}"
       - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
