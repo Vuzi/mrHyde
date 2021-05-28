@@ -58,6 +58,7 @@ jobs:
         with:
           name: 'VuziBot'
           email: 'vuzi@protonmail.com'
+          actor: 'Vuzi'
           token: '${{ secrets.REPO_TOKEN }}'
       - run: git checkout -b "release-v${{ github.event.inputs.version }}"
       - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
