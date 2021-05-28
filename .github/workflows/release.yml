@@ -7,10 +7,9 @@ on:
         description: 'Release version'     
         required: true
 
-jobs:
-  # Setup job, get nodeJs and checkout
-  setup:
-    name: Setup
+  # Build the project
+  build:
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -18,21 +17,13 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '15'
-
-  # Check that the project build
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    needs: setup
-
-    steps:
+      - run: npm ci
+      - run: npm run build
       - uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
-      - run: npm ci
-      - run: npm run build
+          key: release-${{ github.sha }}
 
   # Check that all the tests pass
   test:
@@ -45,7 +36,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: release-${{ github.sha }}
       - run: npm start -- run example out
       - run: npm test
 
@@ -60,7 +51,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: release-${{ github.sha }}
       - run: |
           git config --global user.email "github-action@users.noreply.github.com"
           git config --global user.name "GitHub Action"
@@ -87,7 +78,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: release-${{ github.sha }}
       - uses: repo-sync/pull-request@v2
         with:
           source_branch: "release-v${{ github.event.inputs.version }}"  

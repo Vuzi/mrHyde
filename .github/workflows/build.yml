@@ -6,34 +6,27 @@ on:
       - master
 
 jobs:
-  setup:
-    name: Setup
-    runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '15'
-
+  # Build the project
   build:
     name: Build
     runs-on: ubuntu-latest
     needs: setup
 
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ github.sha }}
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '15'
       - run: npm ci
       - run: npm run build
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: build-${{ github.sha }}
 
+  # Run the tests
   test:
     name: Tests
     runs-on: ubuntu-latest
@@ -44,10 +37,11 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: build-${{ github.sha }}
       - run: npm start -- run example out
       - run: npm test
 
+  # Generate the code coverage
   code-coverage:
     name: Code coverage
     runs-on: ubuntu-latest
@@ -58,7 +52,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: build-${{ github.sha }}
       - run: |
           SUMMARY="$(npm run test:coverage | tail -2 | head -1)"
           TOKENS=($SUMMARY)
@@ -73,6 +67,7 @@ jobs:
           color: green
           namedLogo: jest
 
+  # Create a pre-release
   pre-release:
     name: Pre-release
     runs-on: ubuntu-latest
@@ -83,7 +78,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: build-${{ github.sha }}
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
