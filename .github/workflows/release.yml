@@ -64,13 +64,13 @@ jobs:
       - run: |
           git config --global user.email "github-action@users.noreply.github.com"
           git config --global user.name "GitHub Action"
-      - run: git checkout -b "release-v${{ github.event.inputs.version }}"
-      - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
-      - uses: peterjgrainger/action-create-branch@v2.0.1
+       - uses: peterjgrainger/action-create-branch@v2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           branch: "release-v${{ github.event.inputs.version }}"
+      - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
+      - run: git push
 
   # Create the release pull request
   pull-request:
