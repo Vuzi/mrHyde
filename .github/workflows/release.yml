@@ -19,13 +19,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '15'
-      - uses: oleksiyrudenko/gha-git-credentials@v2.1
-        with:
-          global: true
-          name: 'VuziBot'
-          email: 'vuzi@protonmail.com'
-          actor: 'VuziBot'
-          token: '${{ secrets.REPO_TOKEN }}'
       - run: npm ci
       - run: npm run build
       - uses: actions/cache@v2
@@ -61,6 +54,13 @@ jobs:
         with:
           path: ./*
           key: release-${{ github.sha }}
+      - uses: oleksiyrudenko/gha-git-credentials@v2.1
+        with:
+          global: true
+          name: 'VuziBot'
+          email: 'vuzi@protonmail.com'
+          actor: 'VuziBot'
+          token: '${{ secrets.REPO_TOKEN }}'
       - run: git checkout -b "release-v${{ github.event.inputs.version }}"
       - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
       - run: git commit -m "Bump version to ${{ github.event.inputs.version }}" -a
