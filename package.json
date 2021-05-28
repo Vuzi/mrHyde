@@ -19,8 +19,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage=true --coverageReporters='text-summary'"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Guillaume Villerez",
+  "license": "MIT",
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",
     "@types/jest": "^26.0.23",
