@@ -7,6 +7,11 @@ on:
         description: 'Release version'     
         required: true
 
+<<<<<<< HEAD
+=======
+jobs:
+
+>>>>>>> Update CI #26
   # Build the project
   build:
     name: Build
