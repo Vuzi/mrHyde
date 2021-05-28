@@ -5,10 +5,14 @@ on:
     types: [closed]
 
 jobs:
+  # Setup job, get nodeJs and checkout
   dump:
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: |
+    name: Dump GitHub context
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_CONTEXT: ${{ toJson(github) }}
+
+    steps:
+      - run: |
         echo "$GITHUB_CONTEXT"
         echo ${{ github.event.pull_request.title }}
