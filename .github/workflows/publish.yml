@@ -2,7 +2,7 @@ name: Publish
 
 on:
   release:
-    types: [ created ]
+    types: [ published ]
 
 jobs:
   setup:
@@ -21,7 +21,7 @@ jobs:
     needs: setup
 
     steps:
-      - run: npm install
+      - run: npm ci
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

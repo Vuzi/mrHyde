@@ -27,10 +27,6 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '15'
       - run: npm ci
       - run: npm run build
       - run: npm run build
@@ -55,7 +51,6 @@ jobs:
     needs: test
 
     steps:
-    
       - uses: actions/cache@v2
         id: restore-build
         with:
@@ -67,5 +62,3 @@ jobs:
           prerelease: false
           files: |
             LICENSE.md
-            README.md
-            dist/*.js
