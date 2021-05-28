@@ -66,14 +66,14 @@ jobs:
           git config --global user.name "GitHub Action"
       - uses: peterjgrainger/action-create-branch@v2.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         with:
           branch: "release-v${{ github.event.inputs.version }}"
       - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
       - run: git commit -m "Bump version to ${{ github.event.inputs.version }}" -a
       - uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.REPO_SCOPED_TOKEN }}
+          github_token: ${{ secrets.REPO_TOKEN }}
           branch: "release-v${{ github.event.inputs.version }}"
 
   # Create the release pull request
@@ -95,4 +95,4 @@ jobs:
           pr_title: "Release ${{ github.event.inputs.version }}"
           pr_body: "Release to version ${{ github.event.inputs.version }}"
           pr_label: "release"
-          github_token: ${{ secrets.REPO_SCOPED_TOKEN }}
+          github_token: ${{ secrets.REPO_TOKEN }}
