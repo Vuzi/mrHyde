@@ -56,7 +56,6 @@ jobs:
           key: release-${{ github.sha }}
       - uses: oleksiyrudenko/gha-git-credentials@v2.1
         with:
-          global: true
           name: 'VuziBot'
           email: 'vuzi@protonmail.com'
           token: '${{ secrets.REPO_TOKEN }}'
