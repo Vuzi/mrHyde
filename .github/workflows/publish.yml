@@ -45,7 +45,7 @@ jobs:
       - run: echo ${{ github.event.pull_request.head.ref }} | perl -nle 'm/release\/(v\d+\.\d+\.\d+)/; print "VERSION=$1"' >> $GITHUB_ENV
       - run: git config --global user.name 'VuziBot'
       - run: git config --global user.email 'vuzi@protonmail.com'
-      - run: git tag -a ${{ env.VERSION }}
+      - run: git tag -a ${{ env.VERSION }} -m "Release ${{ env.VERSION }}"
       - run: git push origin ${{ env.VERSION }}
 
   # Perform a release
