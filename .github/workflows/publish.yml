@@ -36,6 +36,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
 
+    outputs:
+      version: ${{ steps.save-version.outputs.version }}
+
     steps:
       - uses: actions/cache@v2
         id: restore-build
@@ -47,7 +50,8 @@ jobs:
       - run: git config --global user.email 'vuzi@protonmail.com'
       - run: git tag -a ${{ env.VERSION }} -m "Release ${{ env.VERSION }}"
       - run: git push origin ${{ env.VERSION }}
-      - run: echo "::set-output name=version::${{ env.VERSION }}"
+      - id: save-version
+        run: echo "::set-output name=version::${{ env.VERSION }}"
 
   # Perform a release
   release:
@@ -65,7 +69,7 @@ jobs:
         with:
           repo_token: ${{ secrets.REPO_TOKEN }}
           prerelease: false
-          automatic_release_tag: ${{ steps.tag.outputs.version }}
+          automatic_release_tag: ${{ needs.tag.outputs.version }}
           files: |
             LICENSE.md
 
