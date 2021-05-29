@@ -28,7 +28,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: publish-${{ github.sha }}
 
   # Tag master
   tag:
@@ -41,8 +41,8 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
-      - uses: echo ::set-env name=VERSION::$(echo ${{ github.event.pull_request.head.ref }} | perl -nle 'm/release\/(v\d+\.\d+\.\d+)/; print $1')
+          key: publish-${{ github.sha }}
+      - run: echo ::set-env name=VERSION::$(echo ${{ github.event.pull_request.head.ref }} | perl -nle 'm/release\/(v\d+\.\d+\.\d+)/; print $1')
       - run: git config --global user.name 'VuziBot'
       - run: git config --global user.email 'vuzi@protonmail.com'
       - run: git tag -a ${{ VERSION }}
@@ -59,7 +59,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: publish-${{ github.sha }}
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.REPO_TOKEN }}"
@@ -79,7 +79,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: publish-${{ github.sha }}
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
