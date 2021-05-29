@@ -77,7 +77,7 @@ jobs:
           key: release-${{ github.sha }}
       - uses: repo-sync/pull-request@v2
         with:
-          source_branch: "release-v${{ github.event.inputs.version }}"  
+          source_branch: "release/v${{ github.event.inputs.version }}"  
           destination_branch: master
           pr_title: "Release ${{ github.event.inputs.version }}"
           pr_body: "Release to version ${{ github.event.inputs.version }}"
