@@ -1,6 +1,6 @@
 {
   "name": "mr-hyde",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "MrHyde is a lightweight and simple static website generator using Liquid and Markdown templates.",
   "main": "./dist/mrHyde.js",
   "bin": {
