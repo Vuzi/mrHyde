@@ -16,3 +16,5 @@ jobs:
       - run: |
           echo "$GITHUB_CONTEXT"
           echo ${{ github.event.pull_request.title }}
+          echo ${{ github.event.pull_request.head.ref }}
+

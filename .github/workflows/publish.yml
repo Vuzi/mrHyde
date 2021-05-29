@@ -2,41 +2,39 @@ name: Release
 
 on:
   pull_request:
-    types: [closed]
+    branches:
+      - release/v*
+    types: 
+      - closed
 
 jobs:
-  # Setup job, get nodeJs and checkout
-  setup:
-    name: Setup
+
+  # Build the project
+  build:
+    name: Build
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.REPO_TOKEN }}'
       - uses: actions/setup-node@v2
         with:
           node-version: '15'
-
-  # Check that the project build
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    needs: setup
-
-    steps:
+      - run: npm ci
+      - run: npm run build
       - uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
           key: ${{ github.sha }}
-      - run: npm ci
-      - run: npm run build
 
   # Tag master
   tag:
     name: Tag master
     runs-on: ubuntu-latest
-    needs: setup
+    needs: build
 
     steps:
       - uses: actions/cache@v2
@@ -44,8 +42,11 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
-      - run: npm ci
-      - run: npm run build
+      - uses: echo ::set-env name=VERSION::$(echo ${{ github.event.pull_request.head.ref }} | perl -nle 'm/release\/(v\d+\.\d+\.\d+)/; print $1')
+      - run: git config --global user.name 'VuziBot'
+      - run: git config --global user.email 'vuzi@protonmail.com'
+      - run: git tag -a ${{ VERSION }}
+      - run: git push origin ${{ VERSION }}
 
   # Perform a release
   release:
@@ -61,7 +62,7 @@ jobs:
           key: ${{ github.sha }}
       - uses: marvinpinto/action-automatic-releases@latest
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          repo_token: "${{ secrets.REPO_TOKEN }}"
           prerelease: false
           automatic_release_tag: false
           files: |
