@@ -13,17 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout the project on master
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+      - name: Install nodeJs
+        uses: actions/setup-node@v2
         with:
           node-version: '15'
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/cache@v2
+      - name: Install & build the project
+        run: |
+          npm ci
+          npm run build
+      - name: Create the cache
+        uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
-          key: build-${{ github.sha }}
+          key: release-${{ github.sha }}
 
   # Run the tests
   test:
@@ -32,13 +39,16 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/cache@v2
+      - name: Restore cache
+        uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
-          key: build-${{ github.sha }}
-      - run: npm start -- run example out
-      - run: npm test
+          key: release-${{ github.sha }}
+      - name: Run the app
+        run: npm start -- run example out
+      - name: Run the tests
+        run: npm test
 
   # Generate the code coverage
   code-coverage:
@@ -47,16 +57,19 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/cache@v2
+      - name: Restore cache
+        uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
-          key: build-${{ github.sha }}
-      - run: |
+          key: release-${{ github.sha }}
+      - name: Retrieve the code coverage percentage
+        run: |
           SUMMARY="$(npm run test:coverage | tail -2 | head -1)"
           TOKENS=($SUMMARY)
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
-      - uses: schneegans/dynamic-badges-action@v1.0.0
+      - name: Create a custom badge
+        uses: schneegans/dynamic-badges-action@v1.0.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: 5edb6797cd18e510fd89a26d1cf2d2af
@@ -73,12 +86,14 @@ jobs:
     needs: test
 
     steps:
-      - uses: actions/cache@v2
+      - name: Restore cache
+        uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
-          key: build-${{ github.sha }}
-      - uses: marvinpinto/action-automatic-releases@latest
+          key: release-${{ github.sha }}
+      - name: Create the Github prerelease
+        uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.REPO_TOKEN }}
           automatic_release_tag: latest

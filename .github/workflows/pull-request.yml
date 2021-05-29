@@ -12,17 +12,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout the project on master
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+      - name: Install nodeJs
+        uses: actions/setup-node@v2
         with:
           node-version: '15'
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '15'
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/cache@v2
+      - name: Install & build the project
+        run: |
+          npm ci
+          npm run build
+      - name: Create the cache
+        uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
@@ -35,10 +38,13 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/cache@v2
+      - name: Restore cache
+        uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
           key: pr-${{ github.sha }}
-      - run: npm start -- run example out
-      - run: npm test
+      - name: Run the app
+        run: npm start -- run example out
+      - name: Run the tests
+        run: npm test

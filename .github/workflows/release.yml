@@ -1,4 +1,4 @@
-name: Release
+name: Release ${{ github.event.inputs.version }}
 
 on: 
   workflow_dispatch:
@@ -12,18 +12,24 @@ jobs:
   # Build the project
   build:
     name: Build
+    description: Setup the environement & build the project
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout the project on master
+        uses: actions/checkout@v2
         with:
-          token: '${{ secrets.REPO_TOKEN }}'
-      - uses: actions/setup-node@v2
+          token: ${{ secrets.REPO_TOKEN }}
+      - name: Install nodeJs
+        uses: actions/setup-node@v2
         with:
           node-version: '15'
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/cache@v2
+      - name: Install & build the project
+        run: | 
+          npm ci
+          npm run build
+      - name: Create the cache
+        uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
@@ -32,54 +38,87 @@ jobs:
   # Check that all the tests pass
   test:
     name: Tests
+    description: Check that all the tests pass
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      - uses: actions/cache@v2
+      - name: Restore cache
+        uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
           key: release-${{ github.sha }}
-      - run: npm start -- run example out
-      - run: npm test
+      - name: Run the app
+        run: npm start -- run example out
+      - name: Run the tests
+        run: npm test
 
-  # Bump the package.json version
+  # Bump the package.json version, create a commit and tag the commit
   bump:
     name: Bump package.json
+    description: Bump the package.json version, create a commit and tag the commit, and push the result on master
     runs-on: ubuntu-latest
     needs: test
 
     steps:
-      - uses: actions/cache@v2
+      - name: Restore cache
+        uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
           key: release-${{ github.sha }}
-      - run: git config --global user.name 'VuziBot'
-      - run: git config --global user.email 'vuzi@protonmail.com'
-      - run: git checkout -b "release/v${{ github.event.inputs.version }}"
-      - run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
-      - run: git commit -m "Bump version to ${{ github.event.inputs.version }}" -a
-      - run: git push -u origin "release/v${{ github.event.inputs.version }}"
+      - name: Configure git user
+        run: |
+          git config --global user.name 'VuziBot'
+          git config --global user.email 'vuzi@protonmail.com'
+      - name: Bump NPM version
+        run: npm version --no-git-tag-version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
+      - name: Create a bump commit & tag
+        run: |
+          git commit -m "Bump version to ${{ github.event.inputs.version }}" -a
+          git tag -a ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
+      - name: Push the changes
+        run: git push --follow-tags
 
-  # Create the release pull request
-  pull-request:
-    name: Release pull request
+  # Perform a release
+  release:
+    name: Release to Github
+    description: Perform a release to Github
     runs-on: ubuntu-latest
     needs: bump
 
     steps:
-      - uses: actions/cache@v2
+      - name: Restore cache
+        uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
           key: release-${{ github.sha }}
-      - uses: repo-sync/pull-request@v2
+      - name: Create the Github release
+        uses: marvinpinto/action-automatic-releases@latest
         with:
-          source_branch: "release/v${{ github.event.inputs.version }}"  
-          destination_branch: master
-          pr_title: "Release ${{ github.event.inputs.version }}"
-          pr_body: "Release to version ${{ github.event.inputs.version }}"
-          pr_label: "release"
-          github_token: ${{ secrets.REPO_TOKEN }}
+          repo_token: ${{ secrets.REPO_TOKEN }}
+          prerelease: false
+          automatic_release_tag: ${{ github.event.inputs.version }}
+          files: |
+            LICENSE.md
+
+  # Publishes to NPM
+  publish:
+    name: Publishes to NPM
+    runs-on: ubuntu-latest
+    needs: bump
+
+    steps:
+      - name: Restore cache
+        uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: release-${{ github.sha }}
+      - name: Publish the NPM release
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
