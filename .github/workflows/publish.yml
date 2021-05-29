@@ -3,7 +3,7 @@ name: Publish
 on:
   pull_request:
     branches:
-      - release/v*
+      - master
     types: 
       - closed
 
@@ -13,7 +13,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/v')
 
     steps:
       - uses: actions/checkout@v2
