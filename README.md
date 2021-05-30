@@ -1,4 +1,4 @@
- <pre style="background: white" > 
+<pre>
 
    $$\      $$\                  $$\   $$\                 $$\
    $$$\    $$$ |                 $$ |  $$ |                $$ |
@@ -12,10 +12,24 @@
                                            \$$$$$$  |
                                             \______/
 </pre>
-![nodejs](https://badgen.net/badge/Built%20With/NodeJs/3C873A?con=typescript) ![ts](https://badgen.net/badge/-/TypeScript/blue?icon=typescript&label)
-![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Vuzi/5edb6797cd18e510fd89a26d1cf2d2af/raw/mrHyde__master.json) ![ci](https://github.com/vuzi/mrHyde/actions/workflows/build.yml/badge.svg)
 
+<p align="center">
 
+<img src="https://badgen.net/badge/Built%20With/NodeJs/3C873A?con=typescript">
+<img src="https://badgen.net/badge/-/TypeScript/blue?icon=typescript&label">
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Vuzi/5edb6797cd18e510fd89a26d1cf2d2af/raw/mrHyde__master.json">
+<img src="https://github.com/vuzi/mrHyde/actions/workflows/build.yml/badge.svg">
+
+ </p>
+ 
+<p align="center">
+
+ <a href="https://nodei.co/npm/mister_hyde/">
+  <img src="https://nodei.co/npm/mister_hyde.png" />
+ </a>
+
+ </p>
+ 
 To scan a folder `./example` ↴
 
 ```
