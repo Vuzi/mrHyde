@@ -1,35 +1,21 @@
-<pre>
-
-   $$\      $$\                  $$\   $$\                 $$\
-   $$$\    $$$ |                 $$ |  $$ |                $$ |
-   $$$$\  $$$$ | $$$$$$\         $$ |  $$ |$$\   $$\  $$$$$$$ | $$$$$$\
-   $$\$$\$$ $$ |$$  __$$\        $$$$$$$$ |$$ |  $$ |$$  __$$ |$$  __$$\
-   $$ \$$$  $$ |$$ |  \__|       $$  __$$ |$$ |  $$ |$$ /  $$ |$$$$$$$$ |
-   $$ |\$  /$$ |$$ |             $$ |  $$ |$$ |  $$ |$$ |  $$ |$$   ____|
-   $$ | \_/ $$ |$$ |             $$ |  $$ |\$$$$$$$ |\$$$$$$$ |$$$$$$$
-   \__|     \__|\__|             \__|  \__| \____$$ | \_______| \_______|
-                                           $$\   $$ |
-                                           \$$$$$$  |
-                                            \______/
-</pre>
+<p align="center">
+   <img src=".github/title.png"/>
+</p>
+<hr/>
 
 <p align="center">
-
-<img src="https://badgen.net/badge/Built%20With/NodeJs/3C873A?con=typescript">
-<img src="https://badgen.net/badge/-/TypeScript/blue?icon=typescript&label">
-<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Vuzi/5edb6797cd18e510fd89a26d1cf2d2af/raw/mrHyde__master.json">
-<img src="https://github.com/vuzi/mrHyde/actions/workflows/build.yml/badge.svg">
-
- </p>
+   <img src="https://badgen.net/badge/Built%20With/NodeJs/3C873A?con=typescript">
+   <img src="https://badgen.net/badge/-/TypeScript/blue?icon=typescript&label">
+   <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Vuzi/5edb6797cd18e510fd89a26d1cf2d2af/raw/mrHyde__master.json">
+   <img src="https://github.com/vuzi/mrHyde/actions/workflows/build.yml/badge.svg">
+</p>
  
 <p align="center">
+   <a href="https://nodei.co/npm/mister_hyde/">
+      <img src="https://nodei.co/npm/mister_hyde.png" />
+   </a>
+</p>
 
- <a href="https://nodei.co/npm/mister_hyde/">
-  <img src="https://nodei.co/npm/mister_hyde.png" />
- </a>
-
- </p>
- 
 To scan a folder `./example` ↴
 
 ```
@@ -41,12 +27,14 @@ To generate from a folder `./example` to `./out` ↴
 $ mrHyde run ./example ./out
 ```
 
+And for more, see [usage](#usage) 🚀
+
 ## What's that?
 **MrHyde** is a very simple and lightweight **static website generator**. MrHyde allow
 to build simple (or complex, that's up to you) static websites, using HTML templates and
 markdown. As for others generator, minimal componants to create a blog are also included.
 
-MyHyde is powered by [LiquidJs](https://liquidjs.com/) & [Marked](https://marked.js.org/).
+MyHyde is powered by [LiquidJs](https://liquidjs.com/) & [Marked](https://marked.js.org/) 🧙‍♂️
 
 ### What's a static website and why should I care
 A static website is _serverless_ website, i.e. meaning that you don't need to write and run
