@@ -54,7 +54,7 @@ jobs:
   code-coverage:
     name: Code coverage
     runs-on: ubuntu-latest
-    needs: build
+    needs: test
 
     steps:
       - name: Restore cache

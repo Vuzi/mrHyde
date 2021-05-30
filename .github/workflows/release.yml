@@ -100,9 +100,9 @@ jobs:
           files: |
             LICENSE.md
 
-  # Publishes to NPM
+  # Publish to NPM
   publish:
-    name: Publishes to NPM
+    name: Publish to NPM
     runs-on: ubuntu-latest
     needs: bump
 
