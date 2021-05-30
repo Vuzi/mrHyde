@@ -60,7 +60,6 @@ $ mrHyde run ./example ./out
 ```
 
 Only scanning the directory is also possible ↴
-Installation ↴
 ```
 $ mrHyde scan ./example
 ```
