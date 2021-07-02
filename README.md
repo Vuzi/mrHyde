@@ -27,6 +27,16 @@ To generate from a folder `./example` to `./out` ↴
 $ mrHyde run ./example ./out
 ```
 
+To generate from a folder `./example` to `./out` in __watch__ mode ↴
+```
+$ mrHyde run ./example ./out -w
+```
+
+To start in dev mode, from a folder `./example` to `./out`, and exposing the generated content to `http://localhost:8080` ↴
+```
+$ mrHyde dev ./example ./out -p 8080
+```
+
 And for more, see [usage](#usage) 🚀
 
 ## What's that?
@@ -59,9 +69,20 @@ Usage from `./example` to `./out` ↴
 $ mrHyde run ./example ./out
 ```
 
+You may also start in watch mode to automatically re-run the generation when any file is modified ↴
+```
+$ mrHyde run ./example ./out --watch
+```
+
 Only scanning the directory is also possible ↴
 ```
 $ mrHyde scan ./example
+```
+
+Finally, if you're actively working you might want to start the application in dev mode,
+which active the watcher and expose the `out` directory to HTTP ↴
+```
+$ mrHyde dev ./example ./out -p 8080
 ```
 
 ### Project structure
@@ -210,14 +231,36 @@ $ mrHyde run -h
 Run the static website generator
 
 Positionals:
-  dir  Directory to scan                               [required] [default: "."]
-  out  Output directory                            [required] [default: "./out"]
+  dir  Directory to scan                                     [string] [required]
+  out  Output directory                              [string] [default: "./out"]
 
 Options:
-  -v, --version    Show version number                                 [boolean]
-  -h, --help       Show help                                           [boolean]
-      --templtate  Template file          [string] [default: "_template.liquid"]
-  -e, --erase      Erase the output before generation [boolean] [default: false]
-  -v, --verbose    Run with verbose logging           [boolean] [default: false]
+  -v, --verbose   Run with verbose logging            [boolean] [default: false]
+      --version   Show version number                                  [boolean]
+  -h, --help      Show help                                            [boolean]
+      --template  Template file           [string] [default: "_template.liquid"]
+      --asset     Asset directory                   [string] [default: "assets"]
+  -e, --erase     Erase the output before generation  [boolean] [default: false]
+  -w, --watch     Run in watch mode                   [boolean] [default: false]
   
+```
+
+```
+$ mrHyde dev -h
+
+Run the static website generator in watch mode and expose the result
+
+Positionals:
+  dir  Directory to scan                                     [string] [required]
+  out  Output directory                              [string] [default: "./out"]
+
+Options:
+  -v, --verbose   Run with verbose logging            [boolean] [default: false]
+      --version   Show version number                                  [boolean]
+  -h, --help      Show help                                            [boolean]
+      --template  Template file           [string] [default: "_template.liquid"]
+      --asset     Asset directory                   [string] [default: "assets"]
+  -e, --erase     Erase the output before generation  [boolean] [default: false]
+      --host      Web server host                [string] [default: "localhost"]
+  -p, --port      Web server port                         [number] [default: 80]
 ```

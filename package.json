@@ -37,7 +37,9 @@
   },
   "dependencies": {
     "chalk": "^4.1.1",
+    "chokidar": "^3.5.2",
     "fs-extra": "^10.0.0",
+    "http-expose": "^0.1.2",
     "liquidjs": "^9.25.0",
     "marked": "^2.0.5",
     "yaml": "^1.10.2",
