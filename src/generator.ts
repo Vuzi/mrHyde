@@ -149,9 +149,13 @@ export class GeneratorInstance {
     targetDir: string,
     erase: boolean
   ): Promise<DirectoryGenerationStat> {
-    // Cleanup the destination folder if needed
-    if (erase)
-      await promises.rmdir(targetDir, { recursive: true })
+    try {
+      await promises.access(targetDir)
+
+      // Cleanup the destination folder if needed
+      if (erase)
+        await promises.rmdir(targetDir, { recursive: true })
+    } catch {}
 
     // Scan the source folder
     const directory = await this.scan(sourceDir)

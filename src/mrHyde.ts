@@ -162,6 +162,7 @@ async function serve(
       host,
       port,
       source: out,
+      listDir: false,
       noCache: true,
       allowedOrigins: ['*']
     })

@@ -1,5 +1,5 @@
 import YAML from 'yaml'
-import marked from 'marked'
+import { marked } from 'marked'
 import { Liquid, Template } from 'liquidjs'
 
 import { GenerationError } from '@root/error'
