@@ -52,7 +52,7 @@ your own web server. You'll still need _some_ server to serve your static files,
 that's a much easier problem to have as there's free services (like Github Pages) that'll do that
 for you, free of charges.
 
-### Is'nt it just like Jekyll?
+### Isn't it just like Jekyll?
 Yes, hence the name. This is a pet project, made to be lightweight and have just the minimum of features 
 required to be effectively used. Jekyll in comparison is (a lot) more mature, and have a plethora of features
 that MrHyde won't ever have.
